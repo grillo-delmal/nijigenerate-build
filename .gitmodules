@@ -1,0 +1,15 @@
+[submodule "src/nijigenerate"]
+	path = src/nijigenerate
+	url = https://github.com/nijigenerate/nijigenerate
+[submodule "src/nijiexpose"]
+	path = src/nijiexpose
+	url = https://github.com/nijigenerate/nijiexpose
+[submodule "src/nijilive"]
+	path = src/nijilive
+	url = https://github.com/nijigenerate/nijilive
+[submodule "src/nijiui"]
+	path = src/nijiui
+	url = https://github.com/nijigenerate/nijiui
+[submodule "src/i2d-imgui"]
+	path = src/i2d-imgui
+	url = https://github.com/inochi2d/i2d-imgui
