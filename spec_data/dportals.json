@@ -1,0 +1,20 @@
+{
+    "summary": "xdg-portals for D",
+    "description":[
+        "This D library allows you to interface with",
+        "XDG Desktop Portals when you aren't using GTK or Qt.",
+        ""
+    ],
+    "build_reqs" : ["dbus-devel"],
+    "requires" : ["dbus-devel"],
+    "check" : [
+        "dub build \\",
+        "    --config=unittest \\",
+        "    --cache=local --temp-build \\",
+        "    --skip-registry=all \\",
+        "    --compiler=ldc2 \\",
+        "    --deep",
+        "dub clean",
+        ""
+    ]
+}

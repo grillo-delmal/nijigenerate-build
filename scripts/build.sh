@@ -155,14 +155,14 @@ if [[ ! -z ${NIJIGENERATE} ]]; then
 
             { time \
                 dub describe \
-                    --config=barebones \
+                    --config=linux-full \
                     --cache=user \
                         2>&1 > /opt/out/nijigenerate-describe ; \
                 }  2>> /opt/out/nijigenerate-stats 
         else
             { time \
                 dub describe \
-                    --config=barebones \
+                    --config=linux-full \
                     --cache=user \
                     --skip-registry=all \
                         2>&1 > /opt/out/nijigenerate-describe ; \
@@ -175,14 +175,14 @@ if [[ ! -z ${NIJIGENERATE} ]]; then
     if [[ -z ${LOAD_CACHE} ]]; then
     { time \
         dub build \
-            --config=barebones \
+            --config=linux-full \
             --cache=user \
                 2>&1 ; \
         } 2>> /opt/out/nijigenerate-stats 
     else
         { time \
             dub build \
-                --config=barebones \
+                --config=linux-full \
                 --cache=user \
                 --skip-registry=all \
                     2>&1 ; \
@@ -209,7 +209,7 @@ if [[ ! -z ${NIJIEXPOSE} ]]; then
         if [[ -z ${LOAD_CACHE} ]]; then
             { time \
                 dub describe \
-                    --config=barebones \
+                    --config=linux-full \
                     --cache=user \
                     --override-config=facetrack-d/web-adaptors \
                         2>&1 > /opt/out/nijiexpose-describe ; \
@@ -217,7 +217,7 @@ if [[ ! -z ${NIJIEXPOSE} ]]; then
         else
             { time \
                 dub describe \
-                    --config=barebones \
+                    --config=linux-full \
                     --cache=user \
                     --override-config=facetrack-d/web-adaptors \
                     --skip-registry=all \
@@ -231,7 +231,7 @@ if [[ ! -z ${NIJIEXPOSE} ]]; then
     if [[ -z ${LOAD_CACHE} ]]; then
         { time \
             dub build \
-                --config=barebones \
+                --config=linux-full \
                 --cache=user \
                 --override-config=facetrack-d/web-adaptors \
                     2>&1 ; \
@@ -239,7 +239,7 @@ if [[ ! -z ${NIJIEXPOSE} ]]; then
     else
         { time \
             dub build \
-                --config=barebones \
+                --config=linux-full \
                 --cache=user \
                 --override-config=facetrack-d/web-adaptors \
                 --skip-registry=all \

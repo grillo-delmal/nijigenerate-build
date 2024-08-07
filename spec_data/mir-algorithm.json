@@ -1,0 +1,7 @@
+{
+    "licenses": ["Apache-2.0"],
+    "url": "https://github.com/libmir/mir-algorithm",
+    "source": "https://github.com/libmir/mir-algorithm/archive/refs/tags/v%{lib_gitver}/mir-algorithm-%{lib_gitver}.tar.gz",
+    "build_reqs": ["zdub-silly-static"],
+    "requires":["zdub-silly-static"]
+}

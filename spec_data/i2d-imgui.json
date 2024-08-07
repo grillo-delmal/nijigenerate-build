@@ -1,0 +1,25 @@
+{
+    "licenses": ["BSL-1.0", "MIT"],
+    "source": "https://github.com/Inochi2D/i2d-imgui/archive/%{i2d_imgui_commit}/i2d-imgui-%{i2d_imgui_short}.tar.gz",
+    "requires" : [
+        "cmake",
+        "gcc",
+        "gcc-c++",
+        "freetype-devel",
+        "SDL2-devel"
+    ],
+    "install": [
+        "# Dependency licenses",
+        "install -d ${RPM_BUILD_ROOT}%{_datadir}/licenses/%{name}-devel/./deps/cimgui/",
+        "install -p -m 644 ./deps/cimgui/LICENSE \\",
+        "    ${RPM_BUILD_ROOT}%{_datadir}/licenses/%{name}-devel/./deps/cimgui/LICENSE",
+        "install -d ${RPM_BUILD_ROOT}%{_datadir}/licenses/%{name}-devel/./deps/imgui/",
+        "install -p -m 644 ./deps/cimgui/imgui/LICENSE.txt \\",
+        "    ${RPM_BUILD_ROOT}%{_datadir}/licenses/%{name}-devel/./deps/imgui/LICENSE.txt",
+        ""
+    ],
+    "files": [
+        "%{_datadir}/licenses/%{name}-devel/*",
+        ""
+    ]
+}

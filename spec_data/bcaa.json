@@ -1,0 +1,9 @@
+{
+    "licenses": ["BSL-1.0"],
+    "url": "https://github.com/aferust/bcaa",
+    "source": "https://github.com/aferust/bcaa/archive/refs/tags/v%{lib_gitver}/bcaa-%{lib_gitver}.tar.gz",
+    "prep":[
+        "rm -rf ./tests",
+        ""
+    ]
+}

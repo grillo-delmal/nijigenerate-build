@@ -1,0 +1,5 @@
+{
+    "licenses": ["Apache-2.0"],
+    "url": "https://github.com/libmir/mir-random",
+    "source": "https://github.com/libmir/mir-random/archive/refs/tags/v%{lib_gitver}/mir-random-%{lib_gitver}.tar.gz"
+}

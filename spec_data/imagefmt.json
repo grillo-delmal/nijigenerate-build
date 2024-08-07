@@ -1,0 +1,4 @@
+{
+    "url": "https://github.com/tjhann/imagefmt",
+    "source": "https://github.com/tjhann/imagefmt/archive/refs/tags/v%{lib_gitver}/imagefmt-%{lib_gitver}.tar.gz"
+}

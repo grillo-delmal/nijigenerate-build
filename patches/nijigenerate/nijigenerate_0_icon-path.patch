@@ -1,0 +1,13 @@
+diff --git a/build-aux/linux/nijigenerate.desktop b/build-aux/linux/nijigenerate.desktop
+index 7691c9f..7d5120d 100644
+--- a/build-aux/linux/nijigenerate.desktop
++++ b/build-aux/linux/nijigenerate.desktop
+@@ -1,6 +1,6 @@
+ [Desktop Entry]
+ Name=nijigenerate
+ Exec=nijigenerate
+-Icon=logo_256
++Icon=nijigenerate
+ Type=Application
+ Categories=Utility
+\ No newline at end of file
