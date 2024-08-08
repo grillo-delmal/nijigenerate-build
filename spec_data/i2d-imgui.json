@@ -1,12 +1,49 @@
 {
     "licenses": ["BSL-1.0", "MIT"],
-    "source": "https://github.com/Inochi2D/i2d-imgui/archive/%{i2d_imgui_commit}/i2d-imgui-%{i2d_imgui_short}.tar.gz",
-    "requires" : [
+    "ex_sources": [
+        "https://github.com/Inochi2D/cimgui/archive/%{cimgui_commit}/cimgui-%{cimgui_short}.tar.gz",
+        "https://github.com/Inochi2D/imgui/archive/%{imgui_commit}/imgui-%{imgui_short}.tar.gz"
+    ],
+    "requires": [
         "cmake",
         "gcc",
         "gcc-c++",
         "freetype-devel",
         "SDL2-devel"
+    ],
+    "build_reqs": [
+        "cmake",
+        "gcc",
+        "gcc-c++",
+        "freetype-devel",
+        "SDL2-devel"
+    ],
+    "prep": [
+        "# cimgui",
+        "",
+        "tar -xzf %{SOURCE1}",
+        "rm -r deps/cimgui", 
+        "mv cimgui-%{cimgui_commit} deps/cimgui",
+        "",
+        "tar -xzf %{SOURCE2}",
+        "rm -r deps/cimgui/imgui", 
+        "mv imgui-%{imgui_commit} deps/cimgui/imgui",
+        "",
+        "rm -rf deps/freetype",
+        "rm -rf deps/glbinding",
+        "rm -rf deps/glfw",
+        "rm -rf deps/SDL",
+        "rm -rf deps/cimgui/imgui/examples/",
+        "",
+        "# FIX: Make i2d-imgui submodule checking only check cimgui",
+        "rm .gitmodules",
+        "cat > .gitmodules <<EOF",
+        "[submodule \"deps/cimgui\"]",
+        "\tpath = deps/cimgui",
+        "\turl = https://github.com/Inochi2D/cimgui.git",
+        "EOF",
+        "mkdir deps/cimgui/.git",
+        ""
     ],
     "install": [
         "# Dependency licenses",

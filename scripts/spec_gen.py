@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 class LibData:
-    def __init__(self, name, deps, gitver, semver = None, dist = 0, commit = "0000000"):
+    def __init__(self, name, deps, gitver, semver = None, dist = 0, commit = "0000000", extra_consts={}):
 
         # Try load specfile data
         try:
@@ -34,18 +34,19 @@ class LibData:
             self.semver = self.gitver
         else:
             self.semver = semver
+        self.extra_consts = extra_consts
         self.dist = dist
         self.commit = commit
         self.deps = deps
         self.deps.sort()
 
-        self.summary = self.summary = spec_data["summary"] \
+        self.summary = spec_data["summary"] \
             if "summary" in spec_data \
             else "%{lib_name} library for D"
             
-        self.licenses = set(spec_data["licenses"] \
+        self.licenses = sorted(set(spec_data["licenses"] \
             if "licenses" in spec_data \
-            else ["BSD-2-Clause"])
+            else ["BSD-2-Clause"]))
 
         self.url = spec_data["url"] \
             if "url" in spec_data \
@@ -159,6 +160,14 @@ class LibSpecFile(LibData):
                         self.vars[key]) ,
                     ""
                 ]))
+            for key in self.extra_consts.keys():
+                f.write('\n'.join([
+                    "%%define %s%s %s" % (
+                        key,
+                        " " * (13-len(key)),
+                        self.extra_consts[key]) ,
+                    ""
+                ]))
             f.write('\n'.join([
                 "",
                 "%if 0%{lib_dist} > 0",
@@ -197,6 +206,7 @@ class LibSpecFile(LibData):
                         src) ,
                     ""
                 ]))
+                src_cnt += 1
 
             if len(self.file_sources) > 0:
                 for src in self.file_sources:

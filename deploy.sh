@@ -7,8 +7,8 @@ PREBUILD_IMGUI=1
 PREDOWNLOAD_LIBS=1
 NIJIGENERATE=1
 NIJIEXPOSE=1
-LOAD_CACHE=
-SAVE_CACHE=
+LOAD_CACHE=1
+SAVE_CACHE=1
 
 podman build -t nijilive-build .
 
@@ -26,7 +26,6 @@ podman run -ti --rm \
     -v $(pwd)/src/nijiexpose:/opt/orig/nijiexpose/:ro,Z \
     -v $(pwd)/src/nijilive:/opt/orig/nijilive/:ro,Z \
     -v $(pwd)/src/nijiui:/opt/orig/nijiui/:ro,Z \
-    -v $(pwd)/src/i2d-imgui:/opt/orig/i2d-imgui/:ro,Z \
     -v $(pwd)/patches:/opt/patches/:ro,Z \
     -v $(pwd)/files:/opt/files/:ro,Z \
     -v $(pwd)/scripts:/opt/scripts/:ro,Z \

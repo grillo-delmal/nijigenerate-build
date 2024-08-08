@@ -133,14 +133,35 @@ for name in true_names:
                 id_deps.add(dep_truename)
     
     # Write specfile
-    lib_spec = LibSpecFile(
-        name, 
-        list(
-            { 
-                dep.split(':')[0] 
-                    for dep in list(id_deps)
-            }), 
-        SEMVER)
+    lib_spec = None
+    if name == "i2d-imgui":
+        imgui_data = {}
+        with open("build_out/i2d-imgui-state") as f:
+            imgui_data = json.load(f)
+
+        lib_spec = LibSpecFile(
+            name, 
+            list(
+                { 
+                    dep.split(':')[0] 
+                        for dep in list(id_deps)
+                }), 
+            SEMVER,
+            extra_consts={
+                "cimgui_commit":imgui_data["cimgui"],
+                "cimgui_short":imgui_data["cimgui"][:7],
+                "imgui_commit":imgui_data["imgui"],
+                "imgui_short":imgui_data["imgui"][:7]
+            })
+    else:
+        lib_spec = LibSpecFile(
+            name, 
+            list(
+                { 
+                    dep.split(':')[0] 
+                        for dep in list(id_deps)
+                }), 
+            SEMVER)
 
     lib_spec.spec_gen(
                 "build_out/nijigenerate-rpm/zdub-deps/zdub-%s/zdub-%s.spec" % (name, name))
@@ -210,32 +231,6 @@ with open("build_out/nijigenerate-rpm/nijigenerate-nightly-rpm/nijigenerate.spec
             "%%define %s_short %s" % (NAME, lib.commit[:7]),
             "",
             ""]))
-
-    spec.write('\n'.join([
-        '# cimgui', 
-        ""]))
-
-    NAME = 'cimgui'
-    GITPATH = './src/i2d-imgui/deps/cimgui'
-    COMMIT = subprocess.run(
-        ['git', '-C', GITPATH, 'rev-parse', 'HEAD'],
-        stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
-    spec.write('\n'.join([
-        "%%define %s_commit %s" % (NAME, COMMIT),
-        "%%define %s_short %s" % (NAME, COMMIT[:7]),
-        ""]))
-
-    NAME = 'imgui'
-    GITPATH = './src/i2d-imgui/deps/cimgui/imgui'
-    COMMIT = subprocess.run(
-        ['git', '-C', GITPATH, 'rev-parse', 'HEAD'],
-        stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
-    spec.write('\n'.join([
-        "%%define %s_commit %s" % (NAME, COMMIT),
-        "%%define %s_short %s" % (NAME, COMMIT[:7]),
-        "",
-        "",
-        ""]))
 
     # WRITING HEAD
     spec.write('\n'.join([line[8:] for line in '''\
@@ -313,22 +308,6 @@ with open("build_out/nijigenerate-rpm/nijigenerate-nightly-rpm/nijigenerate.spec
         src_cnt += 1
     spec.write('\n')
 
-    spec.write('\n'.join([
-        "# cimgui",
-        ""]))        
-    spec.write('\n'.join([
-        "Source%d:%s%s" % (
-            src_cnt, 
-            " " * (8 - math.floor(math.log10(src_cnt) if src_cnt > 0 else 0)), 
-            "https://github.com/Inochi2D/cimgui/archive/%{cimgui_commit}/cimgui-%{cimgui_short}.tar.gz") ,
-        "Source%d:%s%s" % (
-            src_cnt+1, 
-            " " * (8 - math.floor(math.log10(src_cnt+1) if src_cnt+1 > 0 else 0)), 
-            "https://github.com/Inochi2D/imgui/archive/%{imgui_commit}/imgui-%{imgui_short}.tar.gz") ,
-        ""
-    ]))
-    spec.write('\n')
-
     # PATCHES
     ptch_cnt = 0
 
@@ -366,14 +345,6 @@ with open("build_out/nijigenerate-rpm/nijigenerate-nightly-rpm/nijigenerate.spec
         # dlang
         BuildRequires:  ldc
         BuildRequires:  dub
-
-        # cimgui
-        BuildRequires:  cmake
-        BuildRequires:  gcc
-        BuildRequires:  gcc-c++
-        BuildRequires:  freetype-devel
-        BuildRequires:  SDL2-devel
-        BuildRequires:  dbus-devel
 
         BuildRequires:  desktop-file-utils
         BuildRequires:  libappstream-glib
@@ -483,43 +454,6 @@ with open("build_out/nijigenerate-rpm/nijigenerate-nightly-rpm/nijigenerate.spec
         spec.write('\n')
         src_cnt += 1
 
-
-    spec.write('\n'.join([
-        "# cimgui",
-        "",
-        ""]))        
-
-    spec.write('\n'.join([
-        "tar -xzf %%{SOURCE%d}" % src_cnt,
-        "rm -r deps/i2d-imgui/deps/cimgui", 
-        "mv cimgui-%{cimgui_commit} deps/i2d-imgui/deps/cimgui",
-        "",
-        "tar -xzf %%{SOURCE%d}" % (src_cnt+1),
-        "rm -r deps/i2d-imgui/deps/cimgui/imgui", 
-        "mv imgui-%{imgui_commit} deps/i2d-imgui/deps/cimgui/imgui",
-        "",
-        "pushd deps; pushd i2d-imgui",
-        "",
-        "rm -rf deps/freetype",
-        "rm -rf deps/glbinding",
-        "rm -rf deps/glfw",
-        "rm -rf deps/SDL",
-        "rm -rf deps/cimgui/imgui/examples/",
-        "",
-        "# FIX: Make i2d-imgui submodule checking only check cimgui",
-        "rm .gitmodules",
-        "cat > .gitmodules <<EOF",
-        "[submodule \"deps/cimgui\"]",
-        "	path = deps/cimgui",
-        "	url = https://github.com/Inochi2D/cimgui.git",
-        "EOF",
-        "mkdir deps/cimgui/.git",
-        "",
-        "popd; popd",
-        ""
-    ]))
-    spec.write('\n')
-    spec.write('\n')
     spec.write('\n')
 
     # BUILD
@@ -563,13 +497,6 @@ with open("build_out/nijigenerate-rpm/nijigenerate-nightly-rpm/nijigenerate.spec
     # INSTALL LICENSES
     spec.write('\n'.join([line[8:] for line in '''\
         # Dependency licenses
-        install -d ${RPM_BUILD_ROOT}%{_datadir}/licenses/%{name}/./deps/i2d-imgui/cimgui/
-        install -p -m 644 ./deps/i2d-imgui/deps/cimgui/LICENSE \\
-            ${RPM_BUILD_ROOT}%{_datadir}/licenses/%{name}/./deps/i2d-imgui/cimgui/LICENSE
-        install -d ${RPM_BUILD_ROOT}%{_datadir}/licenses/%{name}/./deps/i2d-imgui/imgui/
-        install -p -m 644 ./deps/i2d-imgui/deps/cimgui/imgui/LICENSE.txt \\
-            ${RPM_BUILD_ROOT}%{_datadir}/licenses/%{name}/./deps/i2d-imgui/imgui/LICENSE.txt
-
         install -d ${RPM_BUILD_ROOT}%{_datadir}/licenses/%{name}/deps/
         find ./deps/ -mindepth 1 -maxdepth 1 -exec \\
             install -d ${RPM_BUILD_ROOT}%{_datadir}/licenses/%{name}/{} ';'

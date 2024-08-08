@@ -3,6 +3,7 @@
 set -e
 
 source /opt/scripts/semver.sh
+source /opt/scripts/cimgui.sh
 
 # Clean out folder
 find /opt/out/ -mindepth 1 -maxdepth 1 -exec rm -r -- {} +
@@ -17,7 +18,6 @@ rsync --info=progress2 -azh /opt/orig/nijiexpose/ /opt/src/nijiexpose/
 
 rsync --info=progress2 -azh /opt/orig/nijilive/ /opt/src/nijilive/
 rsync --info=progress2 -azh /opt/orig/nijiui/ /opt/src/nijiui/
-rsync --info=progress2 -azh /opt/orig/i2d-imgui/ /opt/src/i2d-imgui/
 
 echo "======== Applying patches ========"
 
@@ -56,23 +56,6 @@ if [[ ! -z ${LOAD_CACHE} ]]; then
 
     echo "======== Loading cache ========"
 
-    if [ -d /opt/cache/src/i2d-imgui/deps/build_linux_x64_cimguiStatic ]; then
-        mkdir -p /opt/src/i2d-imgui/deps/build_linux_x64_cimguiStatic/
-        rsync -azh /opt/cache/src/i2d-imgui/deps/build_linux_x64_cimguiStatic/ /opt/src/i2d-imgui/deps/build_linux_x64_cimguiStatic/
-    fi
-    if [ -d /opt/cache/src/i2d-imgui/deps/build_linux_x64_cimguiDynamic ]; then
-        mkdir -p /opt/src/i2d-imgui/deps/build_linux_x64_cimguiDynamic/
-        rsync -azh /opt/cache/src/i2d-imgui/deps/build_linux_x64_cimguiDynamic/ /opt/src/i2d-imgui/deps/build_linux_x64_cimguiDynamic/
-    fi
-    if [ -d /opt/cache/src/i2d-imgui/deps/build_linux_aarch64_cimguiStatic ]; then
-        mkdir -p /opt/src/i2d-imgui/deps/build_linux_aarch64_cimguiStatic/
-        rsync -azh /opt/cache/src/i2d-imgui/deps/build_linux_aarch64_cimguiStatic/ /opt/src/i2d-imgui/deps/build_linux_aarch64_cimguiStatic/
-    fi
-    if [ -d /opt/cache/src/i2d-imgui/deps/build_linux_aarch64_cimguiDynamic ]; then
-        mkdir -p /opt/src/i2d-imgui/deps/build_linux_aarch64_cimguiDynamic/
-        rsync -azh /opt/cache/src/i2d-imgui/deps/build_linux_aarch64_cimguiDynamic/ /opt/src/i2d-imgui/deps/build_linux_aarch64_cimguiDynamic/
-    fi
-
     mkdir -p /opt/cache/.dub/
     rsync --info=progress2 -azh /opt/cache/.dub/ ~/.dub/
 
@@ -84,54 +67,6 @@ echo "======== Loading dub dependencies ========"
 # Add dlang deps
 dub add-local /opt/src/nijilive/        "$(semver /opt/src/nijilive/ 0.0.1)"
 dub add-local /opt/src/nijiui/          "$(semver /opt/src/nijiui/ 0.0.1)"
-dub add-local /opt/src/i2d-imgui/       "$(semver /opt/src/i2d-imgui/)"
-
-if [[ ! -z ${PREBUILD_IMGUI} ]]; then
-
-    echo "======== Prebuild imgui ========"
-
-    # Build i2d-imgui deps
-    pushd src
-    pushd i2d-imgui
-
-    mkdir -p deps/build_linux_x64_cimguiStatic
-    mkdir -p deps/build_linux_x64_cimguiDynamic
-
-    ARCH=$(uname -m)
-    if [ "${ARCH}" == 'x86_64' ]; then
-        if [[ -z ${DEBUG} ]]; then
-            cmake -DSTATIC_CIMGUI= -S deps -B deps/build_linux_x64_cimguiStatic
-            cmake --build deps/build_linux_x64_cimguiStatic --config Release
-
-            cmake -S deps -B deps/build_linux_x64_cimguiDynamic
-            cmake --build deps/build_linux_x64_cimguiDynamic --config Release
-        else
-            cmake -DCMAKE_BUILD_TYPE=Debug -DSTATIC_CIMGUI= -S deps -B deps/build_linux_x64_cimguiStatic
-            cmake --build deps/build_linux_x64_cimguiStatic --config Debug
-
-            cmake -DCMAKE_BUILD_TYPE=Debug -S deps -B deps/build_linux_x64_cimguiDynamic
-            cmake --build deps/build_linux_x64_cimguiDynamic --config Debug
-
-        fi
-    elif [ "${ARCH}" == 'aarch64' ]; then
-        if [[ -z ${DEBUG} ]]; then
-            cmake -DSTATIC_CIMGUI= -S deps -B deps/build_linux_aarch64_cimguiStatic
-            cmake --build deps/build_linux_aarch64_cimguiStatic --config Release
-
-            cmake -S deps -B deps/build_linux_aarch64_cimguiDynamic
-            cmake --build deps/build_linux_aarch64_cimguiDynamic --config Release
-        else
-            cmake -DCMAKE_BUILD_TYPE=Debug -DSTATIC_CIMGUI= -S deps -B deps/build_linux_aarch64_cimguiStatic
-            cmake --build deps/build_linux_aarch64_cimguiStatic --config Debug
-
-            cmake -DCMAKE_BUILD_TYPE=Debug -S deps -B deps/build_linux_aarch64_cimguiDynamic
-            cmake --build deps/build_linux_aarch64_cimguiDynamic --config Debug
-        fi
-
-    fi
-    popd
-    popd
-fi
 
 if [[ ! -z ${NIJIGENERATE} ]]; then
     echo "======== Starting nijigenerate ========"
@@ -170,6 +105,9 @@ if [[ ! -z ${NIJIGENERATE} ]]; then
         fi
         echo "" >> /opt/out/nijigenerate-stats 
     fi
+
+    prepare_i2d_imgui
+
     echo "======== Building nijigenerate ========"
     echo "Build time" >> /opt/out/nijigenerate-stats 
     if [[ -z ${LOAD_CACHE} ]]; then
@@ -226,6 +164,9 @@ if [[ ! -z ${NIJIEXPOSE} ]]; then
         fi
         echo "" >> /opt/out/nijiexpose-stats 
     fi
+
+    prepare_i2d_imgui
+
     echo "======== Building nijiexpose ========"
     echo "Build time" >> /opt/out/nijiexpose-stats 
     if [[ -z ${LOAD_CACHE} ]]; then
@@ -282,23 +223,6 @@ if [[ ! -z ${SAVE_CACHE} ]]; then
 
     mkdir -p /opt/cache/.dub/
     rsync --info=progress2 -azh ~/.dub/ /opt/cache/.dub/
-
-    if [ -d /opt/src/i2d-imgui/deps/build_linux_x64_cimguiStatic ]; then
-        mkdir -p /opt/cache/src/i2d-imgui/deps/build_linux_x64_cimguiStatic/
-        rsync --info=progress2 -azh /opt/src/i2d-imgui/deps/build_linux_x64_cimguiStatic/ /opt/cache/src/i2d-imgui/deps/build_linux_x64_cimguiStatic/
-    fi
-    if [ -d /opt/src/i2d-imgui/deps/build_linux_x64_cimguiDynamic ]; then
-        mkdir -p /opt/cache/src/i2d-imgui/deps/build_linux_x64_cimguiDynamic/
-        rsync --info=progress2 -azh /opt/src/i2d-imgui/deps/build_linux_x64_cimguiDynamic/  /opt/cache/src/i2d-imgui/deps/build_linux_x64_cimguiDynamic/
-    fi
-    if [ -d /opt/src/i2d-imgui/deps/build_linux_aarch64_cimguiStatic ]; then
-        mkdir -p /opt/cache/src/i2d-imgui/deps/build_linux_aarch64_cimguiStatic/
-        rsync --info=progress2 -azh /opt/src/i2d-imgui/deps/build_linux_aarch64_cimguiStatic/  /opt/cache/src/i2d-imgui/deps/build_linux_aarch64_cimguiStatic/
-    fi
-    if [ -d /opt/src/i2d-imgui/deps/build_linux_aarch64_cimguiDynamic ]; then
-        mkdir -p /opt/cache/src/i2d-imgui/deps/build_linux_aarch64_cimguiDynamic/
-        rsync --info=progress2 -azh /opt/src/i2d-imgui/deps/build_linux_aarch64_cimguiDynamic/ /opt/cache/src/i2d-imgui/deps/build_linux_aarch64_cimguiDynamic/
-    fi
 
 fi
 
