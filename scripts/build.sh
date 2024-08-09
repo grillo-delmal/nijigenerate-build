@@ -25,10 +25,12 @@ if [ -d ./patches ]; then
     pushd patches
     if [ ! -z "$(ls -A */ 2> /dev/null)" ]; then
         for d in */ ; do
-            for p in ${d}*.patch; do
-                echo "patch /opt/patches/$p"
-                git -C /opt/src/${d} apply /opt/patches/$p
-            done
+            if [ -d /opt/src/${d} ]; then
+                for p in ${d}*.patch; do
+                    echo "patch /opt/patches/$p"
+                    git -C /opt/src/${d} apply /opt/patches/$p
+                done
+            fi
         done
     fi
     popd
