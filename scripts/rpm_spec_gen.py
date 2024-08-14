@@ -400,7 +400,7 @@ with open("build_out/rpms/nijigenerate-rpm/nijigenerate.spec", 'w') as spec:
         Name:           nijigenerate
         Version:        %{nijigenerate_ver}%{?nijigenerate_suffix:}
         Release:        %autorelease
-        Summary:        Tool to create and edit Inochi2D puppets
+        Summary:        Tool to create and edit nijilive puppets
 
         '''.splitlines()]))
 
@@ -599,9 +599,9 @@ with open("build_out/rpms/nijigenerate-rpm/nijigenerate.spec", 'w') as spec:
 
     spec.write('\n'.join([line[8:] for line in '''\
         %description
-        Inochi2D is a framework for realtime 2D puppet animation which can be used for VTubing, 
+        nijilive is a framework for realtime 2D puppet animation which can be used for VTubing, 
         game development and digital animation. 
-        Inochi Creator is a tool that lets you create and edit Inochi2D puppets.
+        nijigenerate is a tool that lets you create and edit nijilive puppets.
         This is an unbranded build, unsupported by the official project.
 
 
@@ -735,13 +735,13 @@ with open("build_out/rpms/nijigenerate-rpm/nijigenerate.spec", 'w') as spec:
         export DFLAGS="%{_d_optflags}"
         dub build \\
             --cache=local \\
-            --config=barebones \\
+            --config=linux-full \\
             --skip-registry=all \\
             --non-interactive \\
             --temp-build \\
             --compiler=ldc2
         mkdir ./out/
-        cp /tmp/.dub/build/nijigenerate*/barebones*/* ./out/
+        cp /tmp/.dub/build/nijigenerate*/linux-full*/* ./out/
 
 
         '''.splitlines()]))
@@ -883,7 +883,7 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
         Name:           nijiexpose
         Version:        %{nijiexpose_ver}%{?nijiexpose_suffix:}
         Release:        %autorelease
-        Summary:        Tool to use Inochi2D puppets
+        Summary:        Tool to use nijilive puppets
 
         '''.splitlines()]))
 
@@ -928,7 +928,7 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
     spec.write('\n'.join([line[8:] for line in '''\
         URL:            https://github.com/grillo-delmal/nijiexpose-rpm
 
-        #https://github.com/Inochi2D/nijiexpose/archive/{nijiexpose_commit}/{name}-{nijiexpose_short}.tar.gz
+        #https://github.com/nijigenerate/nijiexpose/archive/{nijiexpose_commit}/{name}-{nijiexpose_short}.tar.gz
         Source0:        %{name}-%{version}-norestricted.tar.gz
         Source1:        icon.png
     
@@ -1071,9 +1071,9 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
 
     spec.write('\n'.join([line[8:] for line in '''\
         %description
-        Inochi2D is a framework for realtime 2D puppet animation which can be used for VTubing, 
+        nijilive is a framework for realtime 2D puppet animation which can be used for VTubing, 
         game development and digital animation. 
-        Inochi Session is a tool that lets you use Inochi2D puppets as tracked avatars.
+        nijiexpose is a tool that lets you use nijilive puppets as tracked avatars.
         This is an unbranded build, unsupported by the official project.
 
 
@@ -1088,7 +1088,6 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
 
     # GENERIC FIXES
     spec.write('\n'.join([line[8:] for line in '''\
-        # FIX: Inochi nijiexpose version dependent on git
         cat > source/nijiexpose/ver.d <<EOF
         module nijiexpose.ver;
 
@@ -1207,13 +1206,13 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
         export DFLAGS="%{_d_optflags} -L-rpath=%{_libdir}/nijiexpose/"
         dub build \\
             --cache=local \\
-            --config=barebones \\
+            --config=linux-full \\
             --skip-registry=all \\
             --non-interactive \\
             --temp-build \\
             --compiler=ldc2
         mkdir ./out/
-        cp /tmp/.dub/build/nijiexpose*/barebones*/* ./out/
+        cp /tmp/.dub/build/nijiexpose*/linux-full*/* ./out/
 
 
         '''.splitlines()]))
