@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 class LibData:
-    def __init__(self, name, deps, gitver, semver = None, dist = 0, commit = "0000000", extra_consts={}):
+    def __init__(self, name, deps, gitver, semver = None, dist = 0, commit = "0000000", source=None, extra_consts={}):
 
         # Try load specfile data
         try:
@@ -59,12 +59,16 @@ class LibData:
                 "#FIXME: generate an actual description",
                 ""]
 
-        self.prep_file = spec_data["prep_file"] \
+        prep_name = spec_data["prep_name"] if "prep_name" in spec_data else self.name if semver is not None else "%{lib_name}"
+        self.prep_file = \
+            spec_data["prep_file"] \
             if "prep_file" in spec_data \
-            else "%s-%%{%s_commit}" % (
-                self.name, self.name.replace('-', '_').lower()) \
+            else \
+                "%s-%%{%s_commit}" % (
+                    prep_name, self.name.replace('-', '_').lower()) \
                 if semver is not None \
-                else "%{lib_name}-%{lib_gitver}"
+                else \
+                    "%s-%%{lib_gitver}" % prep_name
 
         self.macros = spec_data["macros"] \
             if "macros" in spec_data \
@@ -74,15 +78,14 @@ class LibData:
             if "vars" in spec_data \
             else {}
 
-        self.source = spec_data["source"] \
-            if "source" in spec_data \
-            else \
-                "https://github.com/Inochi2D/%s" \
-                "/archive/refs/tags/v%%{lib_gitver}" \
-                "/%s-%%{lib_gitver}.tar.gz" % (
-                    self.name,
-                    self.name
-                )
+        self.source = source \
+            if source is not None \
+            else ( \
+                spec_data["source"] \
+                if "source" in spec_data \
+                else \
+                    "https://code.dlang.org/packages/" \
+                    "%{lib_name}/%{lib_gitver}.zip")
         self.ex_sources = spec_data["ex_sources"] \
             if "ex_sources" in spec_data \
             else []
@@ -217,6 +220,7 @@ class LibSpecFile(LibData):
                             src["name"]) ,
                         ""
                     ]))
+                src_cnt += 1
 
             if len(self.patches) > 0:
                 f.write("\n")
@@ -233,10 +237,10 @@ class LibSpecFile(LibData):
             # Build Requirements
 
             f.write('\n'.join([
-                "BuildRequires:  setgittag",
                 "BuildRequires:  git",
                 "BuildRequires:  ldc",
                 "BuildRequires:  dub",
+                "BuildRequires:  jq",
                 ""
             ]))
             for dep in self.deps:
@@ -300,7 +304,10 @@ class LibSpecFile(LibData):
                 ""
             ]))
             f.write('\n'.join([
-                "setgittag --rm -f v%{lib_gitver}",
+                "[ -f dub.sdl ] && dub convert -f json",
+                "mv -f dub.json dub.json.base",
+                "jq '. += {\"version\": \"%s\"}' dub.json.base > dub.json.ver" % self.semver,
+                "jq 'walk(if type == \"object\" then with_entries(select(.key | test(\"preBuildCommands*\") | not)) else . end)' dub.json.ver > dub.json",
                 ""
             ]))
             if len(self.file_sources) > 0:

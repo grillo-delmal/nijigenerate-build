@@ -1,0 +1,7 @@
+{
+    "licenses": ["MIT"],
+    "prep":[
+        "mv LICENSE.txt LICENSE",
+        ""
+    ]
+}

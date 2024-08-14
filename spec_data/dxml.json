@@ -1,7 +1,6 @@
 {
     "licenses": ["BSL-1.0"],
     "url": "https://github.com/jmdavis/dxml",
-    "source": "https://github.com/jmdavis/dxml/archive/refs/tags/v%{lib_gitver}/dxml-%{lib_gitver}.tar.gz",
     "prep":[
         "mv LICENSE.txt LICENSE",
         ""

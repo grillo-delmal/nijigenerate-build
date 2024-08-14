@@ -1,17 +1,18 @@
 {
     "licenses": ["BSL-1.0"],
-    "url": "https://github.com/libmir/dcv",
     "prep":[
         "mv LICENSE_1_0.txt LICENSE",
         ""
     ],
+    "build_reqs" : ["luajit"],
+    "requires" : ["luajit"],
     "check" : [
         "dub build \\",
-        "    dcv:core \\",
         "    --cache=local --temp-build \\",
         "    --skip-registry=all \\",
         "    --compiler=ldc2 \\",
-        "    --deep",
+        "    --deep \\",
+        "    --d-version=LUA_52",
         "dub clean",
         ""
     ]

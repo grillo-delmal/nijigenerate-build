@@ -1,0 +1,19 @@
+{
+    "licenses": ["MIT"],
+    "url": "https://github.com/vibe-d/vibe-core",
+    "source": "https://github.com/vibe-d/vibe-core/archive/refs/tags/v%{lib_gitver}/vibe-core-%{lib_gitver}.tar.gz",
+    "prep":[
+        "mv LICENSE.txt LICENSE",
+        ""
+    ],
+    "check" : [
+        "dub build \\",
+        "    --config=epoll \\",
+        "    --cache=local --temp-build \\",
+        "    --skip-registry=all \\",
+        "    --compiler=ldc2 \\",
+        "    --deep",
+        "dub clean",
+        ""
+    ]
+}

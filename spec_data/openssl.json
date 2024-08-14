@@ -1,0 +1,11 @@
+{
+    "licenses": ["OpenSSL"],
+    "url": "https://github.com/D-Programming-Deimos/openssl",
+    "build_reqs" : ["openssl-devel"],
+    "requires" : ["openssl-devel"],
+    "build": [
+        "ldc2 -run scripts/generate_version.d",
+        ""
+    ],
+    "check": [""]
+}

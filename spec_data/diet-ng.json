@@ -1,0 +1,8 @@
+{
+    "licenses": ["MIT"],
+    "url": "https://github.com/rejectedsoftware/diet-ng",
+    "prep":[
+        "mv LICENSE.txt LICENSE",
+        ""
+    ]
+}

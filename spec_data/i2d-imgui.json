@@ -5,11 +5,9 @@
         "https://github.com/Inochi2D/imgui/archive/%{imgui_commit}/imgui-%{imgui_short}.tar.gz"
     ],
     "requires": [
-        "cmake",
-        "gcc",
-        "gcc-c++",
-        "freetype-devel",
-        "SDL2-devel"
+        "libstdc++",
+        "freetype",
+        "SDL2"
     ],
     "build_reqs": [
         "cmake",

@@ -1,5 +1,4 @@
 {
     "url": "https://github.com/KitsunebiGames/i18n",
-    "source": "https://github.com/KitsunebiGames/i18n/archive/refs/tags/v%{lib_gitver}/i18n-%{lib_gitver}.tar.gz",
-    "prep_file": "i18n-%{lib_gitver}"
+    "prep_name": "i18n"
 }

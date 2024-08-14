@@ -6,7 +6,7 @@
         ""
     ],
     "build_reqs" : ["dbus-devel"],
-    "requires" : ["dbus-devel"],
+    "requires" : ["dbus"],
     "check" : [
         "dub build \\",
         "    --config=unittest \\",
