@@ -1,0 +1,13 @@
+diff --git a/build-aux/linux/nijiexpose.desktop b/build-aux/linux/nijiexpose.desktop
+index 9150589..4e8bebb 100644
+--- a/build-aux/linux/nijiexpose.desktop
++++ b/build-aux/linux/nijiexpose.desktop
+@@ -1,6 +1,6 @@
+ [Desktop Entry]
+ Name=nijiexpose
+ Exec=nijiexpose
+-Icon=icon_x256
++Icon=nijiexpose
+ Type=Application
+ Categories=Utility
+\ No newline at end of file
