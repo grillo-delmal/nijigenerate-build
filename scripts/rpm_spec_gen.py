@@ -445,10 +445,7 @@ with open("build_out/rpms/nijigenerate-rpm/nijigenerate.spec", 'w') as spec:
     spec.write('\n'.join([line[8:] for line in '''\
         URL:            https://github.com/grillo-delmal/nijigenerate-rpm
 
-        #https://github.com/nijigenerate/nijigenerate/archive/{nijigenerate_commit}/{name}-{nijigenerate_short}.tar.gz
-        Source0:        %{name}-%{version}-norestricted.tar.gz
-        Source1:        config.d
-        Source2:        icon.png
+        Source0:        https://github.com/nijigenerate/nijigenerate/archive/%{nijigenerate_commit}/%{name}-%{nijigenerate_short}.tar.gz
     
         '''.splitlines()]))
 
@@ -457,7 +454,7 @@ with open("build_out/rpms/nijigenerate-rpm/nijigenerate.spec", 'w') as spec:
         "# Project maintained deps",
         ""]))
 
-    src_cnt = 3
+    src_cnt = 1
 
     for lib in nijigenerate_project_libs:
         spec.write('\n'.join([
@@ -602,7 +599,6 @@ with open("build_out/rpms/nijigenerate-rpm/nijigenerate.spec", 'w') as spec:
         nijilive is a framework for realtime 2D puppet animation which can be used for VTubing, 
         game development and digital animation. 
         nijigenerate is a tool that lets you create and edit nijilive puppets.
-        This is an unbranded build, unsupported by the official project.
 
 
         '''.splitlines()]))
@@ -633,7 +629,7 @@ with open("build_out/rpms/nijigenerate-rpm/nijigenerate.spec", 'w') as spec:
 
         '''.splitlines()]))
 
-    src_cnt = 3
+    src_cnt = 1
     ptch_cnt = 0
 
     patch_list = []
@@ -707,6 +703,10 @@ with open("build_out/rpms/nijigenerate-rpm/nijigenerate.spec", 'w') as spec:
                 src_cnt += 1
                 c += 1
 
+            NAME = lib.name.replace('-', '_').lower()
+            if prep.find("%{lib_semver}") > 0:
+                prep = prep.replace("%{lib_semver}", "%%{%s_semver}" % NAME)
+
             spec.write("\n")
             spec.write(prep)
 
@@ -764,7 +764,7 @@ with open("build_out/rpms/nijigenerate-rpm/nijigenerate.spec", 'w') as spec:
             ${RPM_BUILD_ROOT}%{_metainfodir}/nijigenerate.appdata.xml
 
         install -d $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/256x256/apps/
-        install -p -m 644 %{SOURCE2} $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/256x256/apps/nijigenerate.png
+        install -p -m 644 ./res/logo_256.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/256x256/apps/nijigenerate.png
 
         '''.splitlines()]))
     
@@ -928,9 +928,7 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
     spec.write('\n'.join([line[8:] for line in '''\
         URL:            https://github.com/grillo-delmal/nijiexpose-rpm
 
-        #https://github.com/nijigenerate/nijiexpose/archive/{nijiexpose_commit}/{name}-{nijiexpose_short}.tar.gz
-        Source0:        %{name}-%{version}-norestricted.tar.gz
-        Source1:        icon.png
+        Source0:        https://github.com/nijigenerate/nijiexpose/archive/%{nijiexpose_commit}/%{name}-%{nijiexpose_short}.tar.gz
     
         '''.splitlines()]))
 
@@ -939,7 +937,7 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
         "# Project maintained deps",
         ""]))
 
-    src_cnt = 2
+    src_cnt = 1
 
     for lib in nijiexpose_project_libs:
         spec.write('\n'.join([
@@ -1074,7 +1072,6 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
         nijilive is a framework for realtime 2D puppet animation which can be used for VTubing, 
         game development and digital animation. 
         nijiexpose is a tool that lets you use nijilive puppets as tracked avatars.
-        This is an unbranded build, unsupported by the official project.
 
 
         '''.splitlines()]))
@@ -1104,7 +1101,7 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
 
         '''.splitlines()]))
 
-    src_cnt = 2
+    src_cnt = 1
     ptch_cnt = 0
 
     patch_list = []
@@ -1178,6 +1175,10 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
                 src_cnt += 1
                 c += 1
 
+            NAME = lib.name.replace('-', '_').lower()
+            if prep.find("%{lib_semver}") > 0:
+                prep = prep.replace("%{lib_semver}", "%%{%s_semver}" % NAME)
+
             spec.write("\n")
             spec.write(prep)
 
@@ -1238,7 +1239,7 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
             ${RPM_BUILD_ROOT}%{_metainfodir}/nijiexpose.appdata.xml
 
         install -d $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/256x256/apps/
-        install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/256x256/apps/nijiexpose.png
+        install -p -m 644 ./res/icon_x256.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/256x256/apps/nijiexpose.png
 
         '''.splitlines()]))
     

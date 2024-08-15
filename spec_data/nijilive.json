@@ -1,11 +1,10 @@
 {
-    "source": "https://github.com/nijigenerate/nijilive/archive/%{nijilive_commit}/nijilive-%{nijilive_short}.tar.gz",
     "prep" : [
         "# FIX: nijilive version dependent on git",
         "cat > source/nijilive/ver.d <<EOF",
         "module nijilive.ver;",
         "",
-        "enum IN_VERSION = \"%{nijilive_semver}\";",
+        "enum IN_VERSION = \"%{lib_semver}\";",
         "EOF",
         ""
     ]
