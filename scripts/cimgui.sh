@@ -31,7 +31,10 @@ function check_dub_i2d_imgui() {
 
     pushd /tmp
 
-    I2D_IMGUI_VERSION=$(cat /opt/out/nijigenerate-describe | jq -r '.packages[] | select(.name=="i2d-imgui") | .version')
+    DESCRIBE_FILE=/opt/out/nijigenerate-describe
+    [ ! -f $DESCRIBE_FILE ] && DESCRIBE_FILE=/opt/out/nijiexpose-describe
+
+    I2D_IMGUI_VERSION=$(cat $DESCRIBE_FILE | jq -r '.packages[] | select(.name=="i2d-imgui") | .version')
     git clone -q --depth 1 --branch v${I2D_IMGUI_VERSION} https://github.com/Inochi2D/i2d-imgui 2> /dev/null
     A=($(git -C ./i2d-imgui/ submodule status deps/cimgui)/ //)
     CIMGUI_COMMIT=${A[0]:1}

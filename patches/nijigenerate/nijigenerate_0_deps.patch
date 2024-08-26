@@ -7,7 +7,7 @@ index 7ba972f..8976234 100644
  dependency "i18n-d" version="~>1.0.2"
  dependency "i2d-imgui" version="~>0.8.0"
 -dependency "nijilive" version="~>0.0.1"
-+dependency "nijilive" version="*"
++dependency "nijilive" version="~>0.0.0"
  targetPath "out/"
  workingDirectory "out/"
  dflags "-mscrtlib=msvcrt" platform="windows-ldc"
