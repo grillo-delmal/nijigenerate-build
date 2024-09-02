@@ -26,6 +26,7 @@ podman run -ti --rm \
     -v $(pwd)/src/nijiexpose:/opt/orig/nijiexpose/:ro,Z \
     -v $(pwd)/src/nijilive:/opt/orig-deps/nijilive/:ro,Z \
     -v $(pwd)/src/nijiui:/opt/orig-deps/nijiui/:ro,Z \
+    -v $(pwd)/src/kra-d:/opt/orig-deps/kra-d/:ro,Z \
     -v $(pwd)/patches:/opt/patches/:ro,Z \
     -v $(pwd)/files:/opt/files/:ro,Z \
     -v $(pwd)/scripts:/opt/scripts/:ro,Z \

@@ -10,3 +10,6 @@
 [submodule "src/nijiui"]
 	path = src/nijiui
 	url = https://github.com/nijigenerate/nijiui
+[submodule "src/kra-d"]
+	path = src/kra-d
+	url = https://github.com/Inochi2D/kra-d.git
