@@ -2,7 +2,7 @@
     "licenses": ["OpenSSL"],
     "url": "https://github.com/D-Programming-Deimos/openssl",
     "build_reqs" : ["openssl-devel"],
-    "requires" : ["openssl-devel"],
+    "requires" : ["openssl"],
     "build": [
         "ldc2 -run scripts/generate_version.d",
         ""

@@ -4,7 +4,7 @@
         "mv LICENSE_1_0.txt LICENSE",
         ""
     ],
-    "build_reqs" : ["luajit"],
+    "build_reqs" : ["luajit-devel"],
     "requires" : ["luajit"],
     "check" : [
         "dub build \\",

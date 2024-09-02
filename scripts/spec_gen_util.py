@@ -278,10 +278,10 @@ class LibSpecFile(LibData):
             for dep in self.deps:
                 f.write("Requires:       zdub-%s-static\n" % dep)
 
-            if len(self.requires) > 0:
+            if len(self.build_reqs) > 0:
                 f.write('\n')
-                for req in self.requires:
-                    f.write("Requires:       %s\n" % req)
+                for build_req in self.build_reqs:
+                    f.write("Requires:       %s\n" % build_req)
             f.write('\n'.join([
                 "",
                 "",
@@ -367,10 +367,10 @@ class LibSpecFile(LibData):
 
             f.write('\n'.join([
                 "%install",
-                "mkdir -p %{buildroot}%{_includedir}/zdub/%{lib_name}/%{lib_gitver}",
+                "mkdir -p %{buildroot}%{_datadir}/dub/%{lib_name}/%{lib_gitver}",
                 "cp -r "
                     ". "
-                    "%{buildroot}%{_includedir}/zdub/%{lib_name}/%{lib_gitver}/%{lib_name}",
+                    "%{buildroot}%{_datadir}/dub/%{lib_name}/%{lib_gitver}/%{lib_name}",
                 ""
             ]))
             if len(self.install) > 0:
@@ -383,7 +383,7 @@ class LibSpecFile(LibData):
             f.write('\n'.join([
                 "%files devel",
                 "%license LICENSE",
-                "%{_includedir}/zdub/%{lib_name}/%{lib_gitver}/%{lib_name}/",
+                "%{_datadir}/dub/%{lib_name}/%{lib_gitver}/%{lib_name}/",
                 ""
             ]))
             if len(self.files) > 0:
