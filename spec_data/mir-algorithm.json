@@ -1,5 +1,5 @@
 {
     "licenses": ["Apache-2.0"],
     "url": "https://github.com/libmir/mir-algorithm",
-    "build_reqs": ["zdub-silly-static"]
+    "extra_deps": ["silly"]
 }

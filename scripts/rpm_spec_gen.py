@@ -539,25 +539,28 @@ with open("build_out/rpms/nijigenerate-rpm/nijigenerate.spec", 'w') as spec:
     spec.write('\n')
     spec.write('\n')
 
-    if "i2d-imgui" not in nijigenerate_pd_names:
-        spec.write('\n'.join([line[12:] for line in '''\
-            # static i2d-imgui reqs
-            BuildRequires:  gcc-c++
-            BuildRequires:  freetype-devel
-            BuildRequires:  SDL2-devel
-
-            '''.splitlines()]))
-
     for lib in nijigenerate_project_libs:
-
         if len(lib.build_reqs) > 0:
             spec.write('\n'.join([
-                "#%s deps" % lib.name ,
+                "#%s reqs" % lib.name ,
                 ""
             ]))
             for build_req in lib.build_reqs:
                 spec.write('\n'.join([
                     "BuildRequires:  %s" % build_req ,
+                    ""
+                ]))
+            spec.write('\n')
+
+    for lib in nijigenerate_indirect_libs:
+        if len(lib.build_reqs) > 0:
+            spec.write('\n'.join([
+                "#%s reqs" % lib.name ,
+                ""
+            ]))
+            for build_req in lib.build_reqs:
+                spec.write('\n'.join([
+                    "BuildRequires:       %s" % build_req ,
                     ""
                 ]))
             spec.write('\n')
@@ -1022,15 +1025,27 @@ with open("build_out/rpms/nijiexpose-rpm/nijiexpose.spec", 'w') as spec:
     spec.write('\n')
     spec.write('\n')
     for lib in nijiexpose_project_libs:
-
         if len(lib.build_reqs) > 0:
             spec.write('\n'.join([
-                "#%s deps" % lib.name ,
+                "#%s reqs" % lib.name ,
                 ""
             ]))
             for build_req in lib.build_reqs:
                 spec.write('\n'.join([
                     "BuildRequires:  %s" % build_req ,
+                    ""
+                ]))
+            spec.write('\n')
+
+    for lib in nijiexpose_indirect_libs:
+        if len(lib.build_reqs) > 0:
+            spec.write('\n'.join([
+                "#%s reqs" % lib.name ,
+                ""
+            ]))
+            for build_req in lib.build_reqs:
+                spec.write('\n'.join([
+                    "BuildRequires:       %s" % build_req ,
                     ""
                 ]))
             spec.write('\n')

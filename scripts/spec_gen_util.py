@@ -37,7 +37,11 @@ class LibData:
         self.extra_consts = extra_consts
         self.dist = dist
         self.commit = commit
+
         self.deps = deps
+        if "extra_deps" in spec_data:
+            self.deps += spec_data["extra_deps"]
+            self.deps = list(set(self.deps))
         self.deps.sort()
 
         self.summary = spec_data["summary"] \
